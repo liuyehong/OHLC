@@ -84,20 +84,8 @@ class Alpha:
         return signal
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 if __name__ == '__main__':
-    df = pd.read_csv('./data/ZIV.csv')
+    df = pd.read_csv('./data/BTC-USD.csv')
     alpha = Alpha(df)
-    print(alpha.alpha10(window1=10, window2=20))
+    print(alpha.bollinger_upper_bound(window=10, width=2))
 

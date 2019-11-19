@@ -1,6 +1,5 @@
 from alpha import Alpha
 import numpy as np
-import pandas as pd
 np.seterr(divide='ignore', invalid='ignore')
 
 class Strategy:
@@ -8,9 +7,10 @@ class Strategy:
     def __init__(self, df):
         self.alpha = Alpha(df)
 
+
     def strategy1(self, parameters=(29, 14, 21, 3.0)):
-        self.bound = np.array([[5, 30],[5, 30],[5,30],[0.5, 3]])
-        self.type =['int','int','int','float']
+        self.bound = np.array([[5, 30], [5, 30], [5, 30], [0.5, 3]])
+        self.type = ['int', 'int', 'int', 'float']
 
         window1 = parameters[0]
         window2 = parameters[1]

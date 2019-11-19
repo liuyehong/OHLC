@@ -50,7 +50,6 @@ class Backtest:
         daily_drawdown = df_close/rollmax - 1
         self.max_drawdown = np.min(daily_drawdown)
 
-        #print(self.sharpe_ratio_year, self.max_drawdown)
 
 
 
