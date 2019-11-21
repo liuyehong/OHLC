@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 
-
 class Alpha:
 
     def __init__(self, ohlc):
@@ -15,14 +14,22 @@ class Alpha:
         self.lower = np.min([self.open, self.close], axis=0)
         self.T = len(self.close)
 
+
+    def rolling_window(self, arr, window):
+        shape = arr.shape[:-1] + (arr.shape[-1] - window + 1, window)
+        strides = arr.strides + (arr.strides[-1],)
+        return np.lib.stride_tricks.as_strided(arr, shape=shape, strides=strides)
+
     # alpha should have the same length with the data.
 
     def close_return(self):
-        signal = np.concatenate([[np.nan], (self.close[1:]-self.close[:-1])/self.close[:-1]])
+        signal = np.concatenate([[np.nan],
+                                 (self.close[1:]-self.close[:-1])/self.close[:-1]])
         return signal
 
     def open_return(self):
-        signal = np.concatenate([[np.nan], (self.open[1:]-self.open[:-1])/self.open[:-1]])
+        signal = np.concatenate([[np.nan],
+                                 (self.open[1:]-self.open[:-1])/self.open[:-1]])
         return signal
 
     def close_open_diff(self):
@@ -46,32 +53,42 @@ class Alpha:
         return signal
 
     def moving_average(self, window=10):
-        signal = pd.DataFrame({'signal': self.close}).rolling(window=window).mean().values.reshape(-1)
+        signal = np.concatenate([np.nan*np.ones(window-1), np.mean(self.rolling_window(self.close, window=window), axis=1)])
         return signal
 
     def moving_std(self, window=10):
-        signal = pd.DataFrame({'signal': self.close}).rolling(window=window).std().values.reshape(-1)
+        signal = np.concatenate(
+            [np.nan * np.ones(window - 1), np.std(self.rolling_window(self.close, window=window), axis=1)])
+
         return signal
 
     def moving_var(self, window=10):
-        signal = pd.DataFrame({'signal': self.close}).rolling(window=window).var().values.reshape(-1)
+        signal = np.concatenate(
+            [np.nan * np.ones(window - 1), np.var(self.rolling_window(self.close, window=window), axis=1)])
+
         return signal
 
     def moving_med(self, window=10):
-        signal = pd.DataFrame({'signal': self.close}).rolling(window=window).median().values.reshape(-1)
+        signal = np.concatenate(
+            [np.nan * np.ones(window - 1), np.median(self.rolling_window(self.close, window=window), axis=1)])
+
         return signal
 
     def moving_max(self, window=10):
-        signal = pd.DataFrame({'signal': self.close}).rolling(window=window).max().values.reshape(-1)
+        signal = np.concatenate(
+            [np.nan*np.ones(window-1), np.max(self.rolling_window(self.close, window=window), axis=1)])
+
         return signal
 
     def moving_min(self, window=10):
-        signal = pd.DataFrame({'signal': self.close}).rolling(window=window).min().values.reshape(-1)
+        signal = np.concatenate(
+            [np.nan * np.ones(window - 1), np.min(self.rolling_window(self.close, window=window), axis=1)])
+
         return signal
 
     def moving_average_diff(self, window1=10, window2=20):
-        signal1 = pd.DataFrame({'signal': self.close}).rolling(window=window1).mean().values.reshape(-1)
-        signal2 = pd.DataFrame({'signal': self.close}).rolling(window=window2).mean().values.reshape(-1)
+        signal1 = self.moving_average(window=window1)
+        signal2 = self.moving_average(window=window2)
         signal = signal1-signal2
         return signal
 
@@ -87,5 +104,5 @@ class Alpha:
 if __name__ == '__main__':
     df = pd.read_csv('./data/BTC-USD.csv')
     alpha = Alpha(df)
-    print(alpha.bollinger_upper_bound(window=10, width=2))
+    print(alpha.moving_average(window=10))
 

@@ -41,8 +41,8 @@ class Backtest:
 
 
         if np.isnan(self.sharpe_ratio):
-            self.sharpe_ratio = -np.inf
-            self.sharpe_ratio_year = -np.inf
+            self.sharpe_ratio = -1
+            self.sharpe_ratio_year = -1
 
 
         df_close = pd.DataFrame({'asset': self.history_asset})['asset']
@@ -56,7 +56,7 @@ class Backtest:
 if __name__ == '__main__':
     df = pd.read_csv('./data/BTC-USD.csv')
     backtest = Backtest(df)
-    backtest.run(backtest.strategy.strategy2())
+    backtest.run(backtest.strategy.strategy1())
     print(backtest.sharpe_ratio_year)
 
 

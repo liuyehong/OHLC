@@ -9,7 +9,7 @@ class Strategy:
 
 
     def strategy1(self, parameters=(29, 14, 21, 3.0)):
-        self.bound = np.array([[5, 30], [5, 30], [5, 30], [0.5, 3]])
+        self.bound = np.array([[20, 30], [5, 20], [10, 40], [1, 3]])
         self.type = ['int', 'int', 'int', 'float']
 
         window1 = parameters[0]
@@ -33,7 +33,7 @@ class Strategy:
         return cond_b, cond_s, price_b, price_s
 
     def strategy2(self, parameters=(8, 0.7768753434085348)):
-        self.bound = np.array([[5, 15], [1, 2]])
+        self.bound = np.array([[5, 30], [0.5, 2]])
         self.type = ['int', 'float']
 
         window = parameters[0]
@@ -43,12 +43,12 @@ class Strategy:
         bollinger_lower_bound = self.alpha.bollinger_lower_bound(window=window, width=width)
 
         cond_b = [np.nan] + \
-                 [self.alpha.close[t-1]< bollinger_upper_bound[t-1]
-                  and self.alpha.close[t]> bollinger_upper_bound[t] for t in range(1, self.alpha.T)]
+                 [self.alpha.close[t-1] < bollinger_upper_bound[t-1]
+                  and self.alpha.close[t] > bollinger_upper_bound[t] for t in range(1, self.alpha.T)]
 
         cond_s = [np.nan] + \
-                 [self.alpha.close[t-1]> bollinger_lower_bound[t-1]
-                  and self.alpha.close[t]< bollinger_lower_bound[t] for t in range(1, self.alpha.T)]
+                 [self.alpha.close[t-1] > bollinger_lower_bound[t-1]
+                  and self.alpha.close[t] < bollinger_lower_bound[t] for t in range(1, self.alpha.T)]
 
         price_b = bollinger_lower_bound
         price_s = bollinger_upper_bound
