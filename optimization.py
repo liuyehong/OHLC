@@ -9,7 +9,7 @@ from scipy import interpolate
 from matplotlib import pyplot as plt
 from sklearn.svm import SVR
 from numpy import unravel_index
-
+from scipy import ndimage
 class Optimization:
 
     def __init__(self, df):
@@ -53,7 +53,6 @@ class Optimization:
 
 
 if __name__ == '__main__':
-    from scipy import ndimage
     df = pd.read_csv('./data/^SP500TR.csv')
     opt = Optimization(df)
     x_opt, sr_opt, smooth_kernel = opt.grid_smoothing_method(opt.backtest.strategy.strategy1, n_split=10)
