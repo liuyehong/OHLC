@@ -68,7 +68,7 @@ class Backtest:
 
 
 if __name__ == '__main__':
-    df = pd.read_csv('./data/600006_ohlc.csv')
+    df = pd.read_csv('./data/1Min/600006.csv')
     backtest = Backtest(df)
     backtest.run(backtest.strategy.strategy1())
     print(backtest.sharpe_ratio_year)

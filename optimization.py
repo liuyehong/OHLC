@@ -54,7 +54,7 @@ class Optimization:
 
 
 if __name__ == '__main__':
-    df = pd.read_csv('./data/600006_ohlc.csv')
+    df = pd.read_csv('./data/1Min/600006.csv')
     opt = Optimization(df)
     x_opt, sr_opt, smooth_kernel = opt.grid_smoothing_method(opt.backtest.strategy.strategy1, n_split=10)
     print(x_opt, sr_opt)

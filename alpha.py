@@ -621,14 +621,8 @@ class Alpha:
         return real
 
 
-
-
-
-
-
-
 if __name__ == '__main__':
-    df = pd.read_csv('./data/^SP500TR.csv.csv')
+    df = pd.read_csv('./data/1Min/600006.csv')
     alpha = Alpha(df)
     print(alpha.LINEARREG_SLOPE(window=10))
 
