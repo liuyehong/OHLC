@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from datetime import datetime
+import os
 
 
 def tick_to_ohlc(df):
@@ -16,9 +17,21 @@ def tick_to_ohlc(df):
     return df_ohlc
 
 
+def all_tick_to_ohlc(freq='1Min'):
+
+    root_dir = '../data/tick_level/'
+    target_dir = '../data/' + freq + '/'
+    list_dir = os.listdir(root_dir)
+    for d in list_dir:
+        print(d)
+        if '.csv' in d:
+            df = pd.read_csv(root_dir + d)
+            df_ohlc = tick_to_ohlc(df)
+            df_ohlc.to_csv(target_dir + d)
 
 
 if __name__ == '__main__':
-    df = pd.read_csv('../data/600006.csv')
-    ohlc = tick_to_ohlc(df)
-    ohlc.to_csv('../data/600006_ohlc.csv')
+    df = pd.read_csv('../data/tick_level/600008.csv')
+    #ohlc = tick_to_ohlc(df)
+    #ohlc.to_csv('../data/1Min/600008.csv')
+    all_tick_to_ohlc(freq='1Min')
