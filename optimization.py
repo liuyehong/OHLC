@@ -37,15 +37,18 @@ class Optimization:
         mesh_sr=eval(str_exc)
         str_exc = 'product('+','.join(['range(n_split)' for i in range(len(self.bound))]) + ')'
         mesh_iter = eval(str_exc)
-        sr_matrix = np.zeros(shape=[len(e) for e in self.bound_splits.T])
+        self.sr_matrix = np.zeros(shape=[len(e) for e in self.bound_splits.T])
 
         list_idx = [grid_idx for grid_idx in mesh_iter]
         list_grid = [grid for grid in mesh_sr]
-        for i in range(len(list_idx)):
-            print(float(i)/n_split**len(self.bound))
-            sr_matrix[list_idx[i]] = -self.f(list_grid[i])
 
-        smooth_kernel = ndimage.gaussian_filter(sr_matrix,sigma=1)
+        def process(i):
+            print(float(i) / n_split ** len(self.bound))
+            self.sr_matrix[list_idx[i]] = -self.f(list_grid[i])
+
+        [process(i) for i in range(len(list_idx))]
+
+        smooth_kernel = ndimage.gaussian_filter(self.sr_matrix, sigma=1)
         idx_opt = unravel_index(smooth_kernel.argmax(), smooth_kernel.shape)
         x_opt = [self.bound_splits[idx_opt[i],i] for i in range(len(idx_opt))]
         sr_opt = smooth_kernel[idx_opt]
@@ -56,6 +59,6 @@ class Optimization:
 if __name__ == '__main__':
     df = pd.read_csv('./data/1Min/600006.csv')
     opt = Optimization(df)
-    x_opt, sr_opt, smooth_kernel = opt.grid_smoothing_method(opt.backtest.strategy.strategy1, n_split=10)
+    x_opt, sr_opt, smooth_kernel = opt.grid_smoothing_method(opt.backtest.strategy.strategy1, n_split=5)
     print(x_opt, sr_opt)
 
