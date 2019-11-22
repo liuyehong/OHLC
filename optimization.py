@@ -14,6 +14,7 @@ class Optimization:
 
     def __init__(self, df):
         self.backtest = Backtest(df)
+        self.backtest.freq='1Min'
 
     def f(self, x):
         x = [int(round(x[i])) if self.type[i] == 'int' else x[i] for i in range(len(x))]
@@ -53,7 +54,7 @@ class Optimization:
 
 
 if __name__ == '__main__':
-    df = pd.read_csv('./data/^SP500TR.csv')
+    df = pd.read_csv('./data/600006_ohlc.csv')
     opt = Optimization(df)
     x_opt, sr_opt, smooth_kernel = opt.grid_smoothing_method(opt.backtest.strategy.strategy1, n_split=10)
     print(x_opt, sr_opt)

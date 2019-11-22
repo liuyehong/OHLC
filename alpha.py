@@ -628,7 +628,7 @@ class Alpha:
 
 
 if __name__ == '__main__':
-    df = pd.read_csv('./data/BTC-USD.csv')
+    df = pd.read_csv('./data/^SP500TR.csv.csv')
     alpha = Alpha(df)
     print(alpha.LINEARREG_SLOPE(window=10))
 

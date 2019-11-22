@@ -8,8 +8,8 @@ class Strategy:
         self.alpha = Alpha(df)
 
 
-    def strategy1(self, parameters=(29, 14, 21, 3.0)):
-        self.bound = np.array([[20, 30], [5, 20], [10, 40], [1, 3]])
+    def strategy1(self, parameters=(6, 18, 44, 3.66)):
+        self.bound = np.array([[5, 10], [15, 25], [40, 48], [3, 4]])
         self.type = ['int', 'int', 'int', 'float']
 
         window1 = parameters[0]
